@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "postinstall": "prisma generate",
     "db:apply:turso": "tsx scripts/turso-apply-migrations.ts"
   },
   "dependencies": {
@@ -39,8 +40,6 @@
     "@prisma/engines@7.9.1": true,
     "prisma@7.9.1": true,
     "unrs-resolver@1.12.2": true,
-    "better-sqlite3@12.11.1": true,
-    "better-sqlite3@13.0.3": true,
     "esbuild@0.28.2": true
   }
 }
