@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import "./globals.css";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 
@@ -30,11 +29,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full">
         {children}
         {adsenseClientId && (
-          <Script
+          // Plain <script>, not next/script: AdSense's site-verification
+          // crawler reads the raw HTML response and needs a literal
+          // <script src="..."> tag. next/script's beforeInteractive strategy
+          // instead ships it as a preload link + hydration payload, which
+          // that crawler doesn't recognize as "the snippet is present".
+          <script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClientId}`}
             crossOrigin="anonymous"
-            strategy="beforeInteractive"
           />
         )}
       </body>
