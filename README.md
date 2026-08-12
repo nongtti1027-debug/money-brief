@@ -2,6 +2,8 @@
 
 경제/금융 뉴스를 큐레이션·요약해서 발행하는 1인 운영 뉴스형 웹사이트입니다.
 
+> 배포: https://money-brief.vercel.app (GitHub push 시 Vercel에 자동 배포됩니다)
+
 ## 기술 스택
 
 - **Next.js 16** (App Router, TypeScript, Tailwind CSS v4)
