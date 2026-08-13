@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { CATEGORIES } from "@/lib/constants";
+import { CATEGORIES, POST_TYPES } from "@/lib/constants";
 import type { PostView } from "@/lib/posts";
 
 type Props = {
@@ -23,6 +23,9 @@ export function PostForm({ mode, postId, initial }: Props) {
   const [content, setContent] = useState(initial?.content ?? "");
   const [thumbnail, setThumbnail] = useState(initial?.thumbnail ?? "");
   const [category, setCategory] = useState(initial?.category ?? CATEGORIES[0].slug);
+  const [postType, setPostType] = useState<"brief" | "analysis">(
+    (initial?.postType as "brief" | "analysis") ?? "brief"
+  );
   const [tagsInput, setTagsInput] = useState(initial?.tags.join(", ") ?? "");
   const [status, setStatus] = useState<"draft" | "published">(
     (initial?.status as "draft" | "published") ?? "draft"
@@ -65,6 +68,7 @@ export function PostForm({ mode, postId, initial }: Props) {
       content,
       thumbnail: thumbnail || null,
       category,
+      postType,
       tags: tagsInput
         .split(",")
         .map((t) => t.trim())
@@ -106,6 +110,26 @@ export function PostForm({ mode, postId, initial }: Props) {
           {error}
         </div>
       )}
+
+      <div>
+        <label className="mb-1 block text-sm font-medium text-neutral-700">글 유형</label>
+        <div className="inline-flex rounded-md border border-neutral-300 p-0.5">
+          {POST_TYPES.map((t) => (
+            <button
+              key={t.slug}
+              type="button"
+              onClick={() => setPostType(t.slug)}
+              className={`rounded px-4 py-1.5 text-sm font-semibold transition ${
+                postType === t.slug
+                  ? "bg-blue-700 text-white"
+                  : "text-neutral-500 hover:text-neutral-900"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div>
         <label className="mb-1 block text-sm font-medium text-neutral-700">제목</label>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CATEGORIES, SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
+import { CATEGORIES, POST_TYPES, SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -11,6 +11,11 @@ export function Footer() {
             <p className="mt-1 max-w-sm text-sm text-neutral-500">{SITE_DESCRIPTION}</p>
           </div>
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-neutral-600">
+            {POST_TYPES.map((t) => (
+              <Link key={t.slug} href={t.path} className="font-semibold hover:text-brand">
+                {t.label}
+              </Link>
+            ))}
             {CATEGORIES.map((c) => (
               <Link key={c.slug} href={`/category/${c.slug}`} className="hover:text-brand">
                 {c.label}

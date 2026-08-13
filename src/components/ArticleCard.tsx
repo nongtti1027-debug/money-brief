@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getCategoryLabel } from "@/lib/constants";
+import { getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import type { PostView } from "@/lib/posts";
 
@@ -58,7 +58,14 @@ export function ArticleCard({
         />
       </div>
       <div className="mt-2">
-        <span className="text-xs font-semibold text-accent">{getCategoryLabel(post.category)}</span>
+        <span className="inline-flex items-center gap-1.5">
+          {post.postType === "analysis" && (
+            <span className="rounded bg-brand px-1.5 py-0.5 text-[11px] font-bold text-white">
+              {getPostTypeLabel("analysis")}
+            </span>
+          )}
+          <span className="text-xs font-semibold text-accent">{getCategoryLabel(post.category)}</span>
+        </span>
         <h3 className="mt-1 line-clamp-2 text-base font-bold text-neutral-900 group-hover:text-brand">
           {post.title}
         </h3>

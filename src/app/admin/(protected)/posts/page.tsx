@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { listAllPosts } from "@/lib/posts";
-import { getCategoryLabel } from "@/lib/constants";
+import { getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
 import { formatDateTime } from "@/lib/format";
 import { Pagination } from "@/components/Pagination";
 import { DeletePostButton } from "./delete-post-button";
@@ -34,6 +34,7 @@ export default async function AdminPostsPage({
             <thead className="border-b border-neutral-200 bg-neutral-50 text-neutral-500">
               <tr>
                 <th className="px-4 py-3 font-medium">제목</th>
+                <th className="px-4 py-3 font-medium">유형</th>
                 <th className="px-4 py-3 font-medium">카테고리</th>
                 <th className="px-4 py-3 font-medium">상태</th>
                 <th className="px-4 py-3 font-medium">작성일</th>
@@ -45,6 +46,15 @@ export default async function AdminPostsPage({
                 <tr key={post.id}>
                   <td className="max-w-xs truncate px-4 py-3 font-medium text-neutral-900">
                     {post.title}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-xs font-bold text-white ${
+                        post.postType === "analysis" ? "bg-brand" : "bg-accent"
+                      }`}
+                    >
+                      {getPostTypeLabel(post.postType)}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-neutral-600">{getCategoryLabel(post.category)}</td>
                   <td className="px-4 py-3">

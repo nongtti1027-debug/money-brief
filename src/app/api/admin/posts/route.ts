@@ -24,6 +24,7 @@ export async function POST(request: Request) {
       content: data.content,
       thumbnail: data.thumbnail || null,
       category: data.category,
+      postType: data.postType,
       tags: JSON.stringify(data.tags),
       status: data.status,
       publishedAt: data.status === "published" ? new Date() : null,

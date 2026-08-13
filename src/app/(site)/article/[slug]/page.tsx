@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getCategoryLabel } from "@/lib/constants";
+import { getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
 import { formatDateTime } from "@/lib/format";
 import { getPublishedBySlug, getRelatedPosts } from "@/lib/posts";
 import { ArticleContent } from "@/components/ArticleContent";
@@ -57,12 +57,22 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
         <article className="lg:col-span-3">
           <div className="mb-4">
-            <Link
-              href={`/category/${post.category}`}
-              className="text-sm font-bold text-accent hover:underline"
-            >
-              {getCategoryLabel(post.category)}
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link
+                href={post.postType === "analysis" ? "/analysis" : "/brief"}
+                className={`rounded px-1.5 py-0.5 text-xs font-bold text-white ${
+                  post.postType === "analysis" ? "bg-brand" : "bg-accent"
+                }`}
+              >
+                {getPostTypeLabel(post.postType)}
+              </Link>
+              <Link
+                href={`/category/${post.category}`}
+                className="text-sm font-bold text-accent hover:underline"
+              >
+                {getCategoryLabel(post.category)}
+              </Link>
+            </div>
             <h1 className="mt-2 text-2xl font-black leading-tight text-neutral-900 sm:text-3xl">
               {post.title}
             </h1>

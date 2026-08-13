@@ -32,6 +32,7 @@ export async function PATCH(
       content: data.content,
       thumbnail: data.thumbnail || null,
       category: data.category,
+      postType: data.postType,
       tags: JSON.stringify(data.tags),
       status: data.status,
       publishedAt: isNewlyPublished ? new Date() : existing.publishedAt,

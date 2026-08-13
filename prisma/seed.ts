@@ -13,6 +13,7 @@ type SeedPost = {
   content: string;
   thumbnail: string;
   category: string;
+  postType: "brief" | "analysis";
   tags: string[];
   status: "draft" | "published";
   daysAgo: number;
@@ -26,6 +27,7 @@ const posts: SeedPost[] = [
       "외국인 순매수와 반도체 대형주 강세에 힘입어 코스피가 2,650선을 다시 넘어섰다.",
     thumbnail: "/images/placeholder-1.svg",
     category: "stocks",
+    postType: "brief",
     tags: ["코스피", "반도체", "외국인수급"],
     status: "published",
     daysAgo: 0,
@@ -51,6 +53,7 @@ const posts: SeedPost[] = [
       "서울 아파트 매매가격이 3주 연속 오르며 강남 3구를 중심으로 회복세가 뚜렷해지고 있다.",
     thumbnail: "/images/placeholder-2.svg",
     category: "realestate",
+    postType: "brief",
     tags: ["서울아파트", "강남3구", "매매가격"],
     status: "published",
     daysAgo: 1,
@@ -71,6 +74,7 @@ const posts: SeedPost[] = [
       "한국은행 금융통화위원회가 기준금리를 3.25%로 동결하면서도 연내 추가 인하 가능성을 열어뒀다.",
     thumbnail: "/images/placeholder-3.svg",
     category: "rates",
+    postType: "analysis",
     tags: ["한국은행", "기준금리", "금통위"],
     status: "published",
     daysAgo: 2,
@@ -93,6 +97,7 @@ const posts: SeedPost[] = [
       "원/달러 환율이 1,380원대에서 등락을 거듭하는 가운데 미국 고용지표 발표에 시장의 관심이 쏠리고 있다.",
     thumbnail: "/images/placeholder-4.svg",
     category: "forex",
+    postType: "brief",
     tags: ["원달러환율", "외환시장", "미국고용지표"],
     status: "published",
     daysAgo: 3,
@@ -115,6 +120,7 @@ const posts: SeedPost[] = [
       "전기차 수요 둔화로 어려움을 겪었던 국내 배터리 3사의 북미 공장 가동률이 점진적으로 회복되고 있다.",
     thumbnail: "/images/placeholder-5.svg",
     category: "industry",
+    postType: "analysis",
     tags: ["배터리산업", "전기차", "북미공장"],
     status: "published",
     daysAgo: 4,
@@ -137,6 +143,7 @@ const posts: SeedPost[] = [
       "국세청 연말정산 미리보기 서비스가 열렸다. 놓치기 쉬운 공제 항목 3가지를 정리했다.",
     thumbnail: "/images/placeholder-6.svg",
     category: "money",
+    postType: "brief",
     tags: ["연말정산", "세테크", "소득공제"],
     status: "published",
     daysAgo: 5,
@@ -161,6 +168,7 @@ const posts: SeedPost[] = [
       "수도권 광역급행철도 신규 노선이 예비타당성 조사를 통과하며 착공에 청신호가 켜졌다.",
     thumbnail: "/images/placeholder-2.svg",
     category: "realestate",
+    postType: "analysis",
     tags: ["GTX", "교통호재", "수도권개발"],
     status: "published",
     daysAgo: 6,
@@ -179,6 +187,7 @@ const posts: SeedPost[] = [
       "매파적 발언이 나오며 미 국채 금리가 소폭 상승, 국내 채권 시장에도 영향을 미쳤다.",
     thumbnail: "/images/placeholder-3.svg",
     category: "rates",
+    postType: "brief",
     tags: ["미국채", "연준", "채권시장"],
     status: "draft",
     daysAgo: 0,
@@ -193,6 +202,7 @@ const posts: SeedPost[] = [
       "2차전지 소재 관련 종목들이 실적 발표를 앞두고 변동성이 커지는 모습이다.",
     thumbnail: "/images/placeholder-1.svg",
     category: "stocks",
+    postType: "brief",
     tags: ["2차전지", "소재주", "실적시즌"],
     status: "draft",
     daysAgo: 0,
@@ -211,7 +221,7 @@ async function main() {
 
     await prisma.post.upsert({
       where: { slug: post.slug },
-      update: {},
+      update: { postType: post.postType },
       create: {
         title: post.title,
         slug: post.slug,
@@ -219,6 +229,7 @@ async function main() {
         content: post.content,
         thumbnail: post.thumbnail,
         category: post.category,
+        postType: post.postType,
         tags: JSON.stringify(post.tags),
         status: post.status,
         createdAt: publishedAt ?? new Date(),

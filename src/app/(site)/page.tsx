@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CATEGORIES, getCategoryLabel } from "@/lib/constants";
+import { getCategoryLabel } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
-import { getHeadlinePost, getLatestByCategory, getLatestPublished } from "@/lib/posts";
+import { getHeadlinePost, getLatestByType, getLatestPublished } from "@/lib/posts";
 import { ArticleCard } from "@/components/ArticleCard";
+import { BriefItem } from "@/components/BriefItem";
 import { AdSlot } from "@/components/AdSlot";
 
 const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
@@ -11,13 +12,8 @@ const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
 export default async function HomePage() {
   const headline = await getHeadlinePost();
   const sideList = headline ? await getLatestPublished(5, headline.id) : [];
-
-  const categorySections = await Promise.all(
-    CATEGORIES.map(async (c) => ({
-      category: c,
-      posts: await getLatestByCategory(c.slug, 4),
-    }))
-  );
+  const briefs = await getLatestByType("brief", 10, headline?.id);
+  const analyses = await getLatestByType("analysis", 4, headline?.id);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -68,27 +64,48 @@ export default async function HomePage() {
         <AdSlot position="article-bottom" />
       </div>
 
-      <div className="space-y-12">
-        {categorySections
-          .filter((s) => s.posts.length > 0)
-          .map((section) => (
-            <section key={section.category.slug}>
-              <div className="mb-4 flex items-baseline justify-between border-b-2 border-brand pb-2">
-                <h2 className="text-lg font-black text-neutral-900">{section.category.label}</h2>
-                <Link
-                  href={`/category/${section.category.slug}`}
-                  className="text-sm font-medium text-neutral-500 hover:text-brand"
-                >
-                  더보기 &rarr;
-                </Link>
-              </div>
-              <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-                {section.posts.map((post) => (
-                  <ArticleCard key={post.id} post={post} />
-                ))}
-              </div>
-            </section>
-          ))}
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+        <section>
+          <div className="mb-2 flex items-center justify-between border-b-2 border-accent pb-2">
+            <div className="flex items-center gap-2">
+              <span className="rounded bg-accent px-2 py-0.5 text-xs font-bold text-white">속보</span>
+              <h2 className="text-lg font-black text-neutral-900">최신 속보</h2>
+            </div>
+            <Link href="/brief" className="text-sm font-medium text-neutral-500 hover:text-brand">
+              더보기 &rarr;
+            </Link>
+          </div>
+          {briefs.length === 0 ? (
+            <p className="py-8 text-center text-sm text-neutral-400">아직 등록된 속보가 없습니다.</p>
+          ) : (
+            <div className="divide-y divide-neutral-100">
+              {briefs.map((post) => (
+                <BriefItem key={post.id} post={post} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section>
+          <div className="mb-4 flex items-center justify-between border-b-2 border-brand pb-2">
+            <div className="flex items-center gap-2">
+              <span className="rounded bg-brand px-2 py-0.5 text-xs font-bold text-white">분석</span>
+              <h2 className="text-lg font-black text-neutral-900">심층 분석</h2>
+            </div>
+            <Link href="/analysis" className="text-sm font-medium text-neutral-500 hover:text-brand">
+              더보기 &rarr;
+            </Link>
+          </div>
+          {analyses.length === 0 ? (
+            <p className="py-8 text-center text-sm text-neutral-400">아직 등록된 분석 기사가 없습니다.</p>
+          ) : (
+            <div className="grid grid-cols-2 gap-6">
+              {analyses.map((post) => (
+                <ArticleCard key={post.id} post={post} />
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

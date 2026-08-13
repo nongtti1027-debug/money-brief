@@ -42,6 +42,40 @@ export async function getLatestByCategory(category: string, limit: number): Prom
   return posts.map(toPostView);
 }
 
+export async function getLatestByType(
+  postType: "brief" | "analysis",
+  limit: number,
+  excludeId?: string
+): Promise<PostView[]> {
+  const posts = await prisma.post.findMany({
+    where: { ...PUBLISHED, postType, ...(excludeId ? { id: { not: excludeId } } : {}) },
+    orderBy: { publishedAt: "desc" },
+    take: limit,
+  });
+  return posts.map(toPostView);
+}
+
+export async function getPublishedByType(
+  postType: "brief" | "analysis",
+  page: number
+): Promise<{ posts: PostView[]; total: number; totalPages: number }> {
+  const where = { ...PUBLISHED, postType };
+  const [posts, total] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      orderBy: { publishedAt: "desc" },
+      skip: (page - 1) * POSTS_PER_PAGE,
+      take: POSTS_PER_PAGE,
+    }),
+    prisma.post.count({ where }),
+  ]);
+  return {
+    posts: posts.map(toPostView),
+    total,
+    totalPages: Math.max(1, Math.ceil(total / POSTS_PER_PAGE)),
+  };
+}
+
 export async function getPublishedByCategory(
   category: string,
   page: number

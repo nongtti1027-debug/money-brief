@@ -20,6 +20,7 @@ model Post {
   content     String
   thumbnail   String?
   category    String
+  postType    String    @default("brief") // brief(속보) | analysis(분석)
   tags        String // JSON-stringified string[]
   status      String    @default("draft") // draft | published
   createdAt   DateTime  @default(now())
@@ -28,4 +29,5 @@ model Post {
 
   @@index([category])
   @@index([status, publishedAt])
+  @@index([postType, status, publishedAt])
 }
