@@ -3,6 +3,8 @@ import "./globals.css";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
+const naverSiteVerification = process.env.NAVER_SITE_VERIFICATION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -19,6 +21,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+  },
+  verification: {
+    ...(googleSiteVerification ? { google: googleSiteVerification } : {}),
+    ...(naverSiteVerification
+      ? { other: { "naver-site-verification": naverSiteVerification } }
+      : {}),
   },
 };
 
