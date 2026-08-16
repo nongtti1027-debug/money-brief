@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { after } from "next/server";
 import { notFound } from "next/navigation";
 import { getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
 import { formatDateTime } from "@/lib/format";
-import { getPublishedBySlug, getRelatedPosts } from "@/lib/posts";
+import { getPublishedBySlug, getRelatedPosts, incrementViews } from "@/lib/posts";
+import { getCommentsForPost } from "@/lib/comments";
 import { ArticleContent } from "@/components/ArticleContent";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
+import { LikeButton } from "@/components/LikeButton";
+import { CommentSection } from "@/components/CommentSection";
 
 type Params = { slug: string };
 const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
@@ -50,7 +54,12 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
     notFound();
   }
 
-  const related = await getRelatedPosts(post, 4);
+  after(() => incrementViews(post.id));
+
+  const [related, comments] = await Promise.all([
+    getRelatedPosts(post, 4),
+    getCommentsForPost(post.id),
+  ]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -78,6 +87,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
             </h1>
             <div className="mt-3 flex items-center gap-3 border-b border-neutral-200 pb-4 text-sm text-neutral-400">
               <span>{formatDateTime(post.publishedAt ?? post.createdAt)}</span>
+              <span>조회 {post.views.toLocaleString()}</span>
             </div>
           </div>
 
@@ -107,12 +117,16 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
             </div>
           )}
 
+          <div className="mt-6 flex justify-center border-t border-neutral-200 pt-6">
+            <LikeButton slug={post.slug} initialLikes={post.likes} />
+          </div>
+
           <div className="my-8">
             <AdSlot position="article-bottom" />
           </div>
 
           {related.length > 0 && (
-            <div className="border-t border-neutral-200 pt-8">
+            <div className="mb-10 border-t border-neutral-200 pt-8">
               <h2 className="mb-4 text-lg font-black text-neutral-900">관련 기사</h2>
               <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
                 {related.map((r) => (
@@ -121,6 +135,10 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
               </div>
             </div>
           )}
+
+          <div className="border-t border-neutral-200 pt-8">
+            <CommentSection slug={post.slug} initialComments={comments} />
+          </div>
         </article>
 
         <aside className="hidden lg:block">

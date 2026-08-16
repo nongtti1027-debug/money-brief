@@ -165,3 +165,18 @@ export async function getPostById(id: string): Promise<PostView | null> {
   const post = await prisma.post.findUnique({ where: { id } });
   return post ? toPostView(post) : null;
 }
+
+// --- Views / likes ---
+
+export async function incrementViews(id: string): Promise<void> {
+  await prisma.post.update({ where: { id }, data: { views: { increment: 1 } } });
+}
+
+export async function incrementLikes(id: string): Promise<number> {
+  const post = await prisma.post.update({
+    where: { id },
+    data: { likes: { increment: 1 } },
+    select: { likes: true },
+  });
+  return post.likes;
+}

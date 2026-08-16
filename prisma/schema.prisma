@@ -23,11 +23,26 @@ model Post {
   postType    String    @default("brief") // brief(속보) | analysis(분석)
   tags        String // JSON-stringified string[]
   status      String    @default("draft") // draft | published
+  views       Int       @default(0)
+  likes       Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   publishedAt DateTime?
 
+  comments Comment[]
+
   @@index([category])
   @@index([status, publishedAt])
   @@index([postType, status, publishedAt])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
 }

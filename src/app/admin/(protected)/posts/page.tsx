@@ -37,6 +37,7 @@ export default async function AdminPostsPage({
                 <th className="px-4 py-3 font-medium">유형</th>
                 <th className="px-4 py-3 font-medium">카테고리</th>
                 <th className="px-4 py-3 font-medium">상태</th>
+                <th className="px-4 py-3 font-medium text-right">조회수</th>
                 <th className="px-4 py-3 font-medium">작성일</th>
                 <th className="px-4 py-3"></th>
               </tr>
@@ -67,6 +68,9 @@ export default async function AdminPostsPage({
                     >
                       {post.status === "published" ? "발행됨" : "임시저장"}
                     </span>
+                  </td>
+                  <td className="px-4 py-3 text-right text-neutral-600">
+                    {post.views.toLocaleString()}
                   </td>
                   <td className="px-4 py-3 text-neutral-500">{formatDateTime(post.createdAt)}</td>
                   <td className="px-4 py-3 text-right">

@@ -20,6 +20,9 @@ export default async function AdminProtectedLayout({
             <Link href="/admin/posts" className="text-neutral-600 hover:text-neutral-900">
               글 목록
             </Link>
+            <Link href="/admin/comments" className="text-neutral-600 hover:text-neutral-900">
+              댓글 관리
+            </Link>
             <Link
               href="/admin/posts/new"
               className="rounded-md bg-blue-700 px-3 py-1.5 font-semibold text-white hover:bg-blue-800"
