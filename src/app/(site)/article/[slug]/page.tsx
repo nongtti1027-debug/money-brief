@@ -12,9 +12,11 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
 import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
+import { ShareButtons } from "@/components/ShareButtons";
 
 type Params = { slug: string };
 const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export async function generateMetadata({
   params,
@@ -85,9 +87,12 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
             <h1 className="mt-2 text-2xl font-black leading-tight text-neutral-900 sm:text-3xl">
               {post.title}
             </h1>
-            <div className="mt-3 flex items-center gap-3 border-b border-neutral-200 pb-4 text-sm text-neutral-400">
-              <span>{formatDateTime(post.publishedAt ?? post.createdAt)}</span>
-              <span>조회 {post.views.toLocaleString()}</span>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-4">
+              <div className="flex items-center gap-3 text-sm text-neutral-400">
+                <span>{formatDateTime(post.publishedAt ?? post.createdAt)}</span>
+                <span>조회 {post.views.toLocaleString()}</span>
+              </div>
+              <ShareButtons url={`${siteUrl}/article/${post.slug}`} title={post.title} />
             </div>
           </div>
 
