@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { after } from "next/server";
 import { notFound } from "next/navigation";
-import { AUTHOR_NAME, getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
+import { AUTHOR_NAME, getCategoryLabel, getPostTypeLabel, getThumbnail } from "@/lib/constants";
 import { formatDateTime } from "@/lib/format";
 import { getPublishedBySlug, getRelatedPosts, incrementViews } from "@/lib/posts";
 import { getCommentsForPost } from "@/lib/comments";
@@ -15,7 +15,6 @@ import { CommentSection } from "@/components/CommentSection";
 import { ShareButtons } from "@/components/ShareButtons";
 
 type Params = { slug: string };
-const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export async function generateMetadata({
@@ -27,7 +26,7 @@ export async function generateMetadata({
   const post = await getPublishedBySlug(slug);
   if (!post) return {};
 
-  const imageUrl = post.thumbnail || FALLBACK_THUMBNAIL;
+  const imageUrl = getThumbnail(post.category, post.thumbnail);
 
   return {
     title: post.title,
@@ -100,7 +99,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
 
           <div className="relative mb-6 aspect-video overflow-hidden rounded-lg bg-neutral-100">
             <Image
-              src={post.thumbnail || FALLBACK_THUMBNAIL}
+              src={getThumbnail(post.category, post.thumbnail)}
               alt=""
               fill
               priority

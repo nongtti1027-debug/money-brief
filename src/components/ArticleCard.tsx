@@ -1,10 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
+import { getCategoryLabel, getPostTypeLabel, getThumbnail } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import type { PostView } from "@/lib/posts";
-
-const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
 
 export function ArticleCard({
   post,
@@ -22,7 +20,7 @@ export function ArticleCard({
       <Link href={`/article/${post.slug}`} className="group flex gap-4">
         <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-md bg-neutral-100 sm:h-24 sm:w-40">
           <Image
-            src={post.thumbnail || FALLBACK_THUMBNAIL}
+            src={getThumbnail(post.category, post.thumbnail)}
             alt=""
             fill
             sizes="160px"
@@ -49,7 +47,7 @@ export function ArticleCard({
     <Link href={`/article/${post.slug}`} className="group block">
       <div className="relative aspect-video overflow-hidden rounded-md bg-neutral-100">
         <Image
-          src={post.thumbnail || FALLBACK_THUMBNAIL}
+          src={getThumbnail(post.category, post.thumbnail)}
           alt=""
           fill
           priority={priority}

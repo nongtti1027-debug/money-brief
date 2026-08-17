@@ -1,13 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getCategoryLabel } from "@/lib/constants";
+import { getCategoryLabel, getThumbnail } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
 import { getHeadlinePost, getLatestByType, getPopularPosts } from "@/lib/posts";
 import { ArticleCard } from "@/components/ArticleCard";
 import { BriefItem } from "@/components/BriefItem";
 import { AdSlot } from "@/components/AdSlot";
-
-const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
 
 export default async function HomePage() {
   const headline = await getHeadlinePost();
@@ -22,7 +20,7 @@ export default async function HomePage() {
           <Link href={`/article/${headline.slug}`} className="group block lg:col-span-2">
             <div className="relative aspect-[16/9] overflow-hidden rounded-lg bg-neutral-100">
               <Image
-                src={headline.thumbnail || FALLBACK_THUMBNAIL}
+                src={getThumbnail(headline.category, headline.thumbnail)}
                 alt=""
                 fill
                 priority

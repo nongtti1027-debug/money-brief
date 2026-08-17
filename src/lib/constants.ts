@@ -1,19 +1,27 @@
 export type Category = {
   slug: string;
   label: string;
+  placeholder: string;
 };
 
 export const CATEGORIES: Category[] = [
-  { slug: "stocks", label: "증시" },
-  { slug: "realestate", label: "부동산" },
-  { slug: "rates", label: "금리" },
-  { slug: "forex", label: "환율" },
-  { slug: "industry", label: "산업" },
-  { slug: "money", label: "재테크" },
+  { slug: "stocks", label: "증시", placeholder: "/images/placeholder-1.svg" },
+  { slug: "realestate", label: "부동산", placeholder: "/images/placeholder-2.svg" },
+  { slug: "rates", label: "금리", placeholder: "/images/placeholder-3.svg" },
+  { slug: "forex", label: "환율", placeholder: "/images/placeholder-4.svg" },
+  { slug: "industry", label: "산업", placeholder: "/images/placeholder-5.svg" },
+  { slug: "money", label: "재테크", placeholder: "/images/placeholder-6.svg" },
 ];
 
 export function getCategoryLabel(slug: string): string {
   return CATEGORIES.find((c) => c.slug === slug)?.label ?? slug;
+}
+
+const DEFAULT_PLACEHOLDER = "/images/placeholder-default.svg";
+
+export function getThumbnail(category: string, thumbnail?: string | null): string {
+  if (thumbnail) return thumbnail;
+  return CATEGORIES.find((c) => c.slug === category)?.placeholder ?? DEFAULT_PLACEHOLDER;
 }
 
 export type PostType = {
