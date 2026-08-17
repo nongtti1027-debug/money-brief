@@ -33,6 +33,15 @@ export async function getLatestPublished(limit: number, excludeId?: string): Pro
   return posts.map(toPostView);
 }
 
+export async function getPopularPosts(limit: number, excludeId?: string): Promise<PostView[]> {
+  const posts = await prisma.post.findMany({
+    where: { ...PUBLISHED, ...(excludeId ? { id: { not: excludeId } } : {}) },
+    orderBy: [{ views: "desc" }, { likes: "desc" }, { publishedAt: "desc" }],
+    take: limit,
+  });
+  return posts.map(toPostView);
+}
+
 export async function getLatestByCategory(category: string, limit: number): Promise<PostView[]> {
   const posts = await prisma.post.findMany({
     where: { ...PUBLISHED, category },

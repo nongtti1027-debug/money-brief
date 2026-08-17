@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getCategoryLabel } from "@/lib/constants";
 import { formatDate } from "@/lib/format";
-import { getHeadlinePost, getLatestByType, getLatestPublished } from "@/lib/posts";
+import { getHeadlinePost, getLatestByType, getPopularPosts } from "@/lib/posts";
 import { ArticleCard } from "@/components/ArticleCard";
 import { BriefItem } from "@/components/BriefItem";
 import { AdSlot } from "@/components/AdSlot";
@@ -11,7 +11,7 @@ const FALLBACK_THUMBNAIL = "/images/placeholder-default.svg";
 
 export default async function HomePage() {
   const headline = await getHeadlinePost();
-  const sideList = headline ? await getLatestPublished(5, headline.id) : [];
+  const sideList = headline ? await getPopularPosts(5, headline.id) : [];
   const briefs = await getLatestByType("brief", 10, headline?.id);
   const analyses = await getLatestByType("analysis", 4, headline?.id);
 
@@ -44,12 +44,32 @@ export default async function HomePage() {
             </div>
           </Link>
 
-          <div className="flex flex-col gap-5 divide-y divide-neutral-100 lg:col-span-1">
-            {sideList.map((post) => (
-              <div key={post.id} className="pt-5 first:pt-0">
-                <ArticleCard post={post} layout="horizontal" />
-              </div>
-            ))}
+          <div className="lg:col-span-1">
+            <div className="mb-3 flex items-center gap-1.5 text-sm font-bold text-neutral-900">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-4 w-4 text-accent"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              지금 많이 본 기사
+            </div>
+            <div className="flex flex-col gap-5 divide-y divide-neutral-100">
+              {sideList.map((post, i) => (
+                <div key={post.id} className="flex gap-3 pt-5 first:pt-0">
+                  <span className="w-4 shrink-0 pt-0.5 text-lg font-black italic leading-none text-neutral-300">
+                    {i + 1}
+                  </span>
+                  <ArticleCard post={post} layout="horizontal" />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       )}
