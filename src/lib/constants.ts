@@ -34,3 +34,5 @@ export function getPostTypeLabel(slug: string): string {
 export const SITE_NAME = "머니브리프";
 export const SITE_DESCRIPTION = "경제 뉴스와 시황을 한눈에 정리해서 전해드립니다.";
 export const POSTS_PER_PAGE = 12;
+export const AUTHOR_NAME = "머니브리프 편집부";
+export const CONTACT_EMAIL = "nongtti1027@gmail.com";

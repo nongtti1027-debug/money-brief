@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { after } from "next/server";
 import { notFound } from "next/navigation";
-import { getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
+import { AUTHOR_NAME, getCategoryLabel, getPostTypeLabel } from "@/lib/constants";
 import { formatDateTime } from "@/lib/format";
 import { getPublishedBySlug, getRelatedPosts, incrementViews } from "@/lib/posts";
 import { getCommentsForPost } from "@/lib/comments";
@@ -45,6 +45,7 @@ export async function generateMetadata({
       description: post.excerpt,
       images: [imageUrl],
     },
+    authors: [{ name: AUTHOR_NAME }],
   };
 }
 
@@ -89,6 +90,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
             </h1>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-4">
               <div className="flex items-center gap-3 text-sm text-neutral-400">
+                <span className="font-semibold text-neutral-600">{AUTHOR_NAME}</span>
                 <span>{formatDateTime(post.publishedAt ?? post.createdAt)}</span>
                 <span>조회 {post.views.toLocaleString()}</span>
               </div>

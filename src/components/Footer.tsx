@@ -28,7 +28,12 @@ export function Footer() {
             본 사이트의 콘텐츠는 정보 제공을 목적으로 하며, 투자 판단에 대한 책임은 이용자
             본인에게 있습니다.
           </p>
-          <p className="mt-1">© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</p>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>© {new Date().getFullYear()} {SITE_NAME}. All rights reserved.</span>
+            <Link href="/privacy" className="underline hover:text-neutral-600">
+              개인정보처리방침
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
