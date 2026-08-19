@@ -7,6 +7,11 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { BriefItem } from "@/components/BriefItem";
 import { AdSlot } from "@/components/AdSlot";
 
+// Without this, Next prerenders the homepage once at build time (no
+// dynamic API is used here) and it goes stale until the next deploy —
+// newly published/edited posts wouldn't show up until a redeploy.
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const headline = await getHeadlinePost();
   const sideList = headline ? await getPopularPosts(5, headline.id) : [];

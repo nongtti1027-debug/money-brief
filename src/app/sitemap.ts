@@ -4,6 +4,10 @@ import { CATEGORIES, POST_TYPES } from "@/lib/constants";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+// sitemap.ts is cached at build time by default; force it to run fresh
+// on each request so newly published articles show up without a redeploy.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await prisma.post.findMany({
     where: { status: "published" },
