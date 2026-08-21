@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { MobileStickyAd } from "@/components/MobileStickyAd";
 
 const adsenseClientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
@@ -10,7 +9,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <Header />
       <div className="flex-1">{children}</div>
       <Footer />
-      <MobileStickyAd />
       {adsenseClientId && (
         // Plain <script>, not next/script: AdSense's site-verification
         // crawler reads the raw HTML response and needs a literal

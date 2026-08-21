@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CATEGORIES, POST_TYPES } from "@/lib/constants";
 import { SearchBar } from "./SearchBar";
-import { AdSlot } from "./AdSlot";
+import { HeaderAd } from "./HeaderAd";
 
 const TYPE_STYLES: Record<string, string> = {
   brief: "text-accent hover:bg-accent/10",
@@ -49,11 +49,7 @@ export function Header() {
         </div>
       </div>
 
-      <div className="border-t border-neutral-100 bg-neutral-50 py-2">
-        <div className="mx-auto max-w-6xl px-4">
-          <AdSlot position="header" />
-        </div>
-      </div>
+      <HeaderAd />
     </header>
   );
 }

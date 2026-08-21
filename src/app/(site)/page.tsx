@@ -6,6 +6,7 @@ import { getHeadlinePost, getLatestByType, getPopularPosts } from "@/lib/posts";
 import { ArticleCard } from "@/components/ArticleCard";
 import { BriefItem } from "@/components/BriefItem";
 import { AdSlot } from "@/components/AdSlot";
+import { MobileStickyAd } from "@/components/MobileStickyAd";
 
 // Without this, Next prerenders the homepage once at build time (no
 // dynamic API is used here) and it goes stale until the next deploy —
@@ -17,6 +18,7 @@ export default async function HomePage() {
   const sideList = headline ? await getPopularPosts(5, headline.id) : [];
   const briefs = await getLatestByType("brief", 10, headline?.id);
   const analyses = await getLatestByType("analysis", 4, headline?.id);
+  const hasAnyContent = Boolean(headline) || briefs.length > 0 || analyses.length > 0;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -83,9 +85,11 @@ export default async function HomePage() {
         </div>
       )}
 
-      <div className="my-10">
-        <AdSlot position="article-bottom" />
-      </div>
+      {hasAnyContent && (
+        <div className="my-10">
+          <AdSlot position="article-bottom" />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         <section>
@@ -130,6 +134,7 @@ export default async function HomePage() {
           )}
         </section>
       </div>
+      {hasAnyContent && <MobileStickyAd />}
     </div>
   );
 }

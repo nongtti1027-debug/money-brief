@@ -10,6 +10,7 @@ import { getCommentsForPost } from "@/lib/comments";
 import { ArticleContent } from "@/components/ArticleContent";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
+import { MobileStickyAd } from "@/components/MobileStickyAd";
 import { LikeButton } from "@/components/LikeButton";
 import { CommentSection } from "@/components/CommentSection";
 import { ShareButtons } from "@/components/ShareButtons";
@@ -153,6 +154,7 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
           </div>
         </aside>
       </div>
+      <MobileStickyAd />
     </div>
   );
 }

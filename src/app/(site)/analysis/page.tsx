@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getPublishedByType } from "@/lib/posts";
 import { ArticleCard } from "@/components/ArticleCard";
 import { AdSlot } from "@/components/AdSlot";
+import { MobileStickyAd } from "@/components/MobileStickyAd";
 import { Pagination } from "@/components/Pagination";
 
 type Search = { page?: string };
@@ -40,12 +41,15 @@ export default async function AnalysisPage({
           )}
           <Pagination page={page} totalPages={totalPages} basePath="/analysis" />
         </div>
-        <aside className="hidden lg:block">
-          <div className="sticky top-4">
-            <AdSlot position="sidebar" />
-          </div>
-        </aside>
+        {posts.length > 0 && (
+          <aside className="hidden lg:block">
+            <div className="sticky top-4">
+              <AdSlot position="sidebar" />
+            </div>
+          </aside>
+        )}
       </div>
+      {posts.length > 0 && <MobileStickyAd />}
     </div>
   );
 }
